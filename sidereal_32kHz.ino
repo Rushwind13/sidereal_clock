@@ -69,8 +69,26 @@ void setup_Timer1()
      * More testing is required.
      */
     // set compare match register to desired timer count:
-    OCR1A = 311;
-  
+    //OCR1A = 311;
+    // Jimbo notes
+    //OCR1A = 31250;  // "1.00s" freq on my meter
+    //OCR1A = 3125;   // "100ms" freq on my meter
+    //OCR1A = 312;    // "10.0ms" freq on my meter
+    //OCR1A = 31335; // "1.00s" freq on my meter (expected: 1.002)
+    //OCR1A = 3133; // "100ms" freq on my meter (expected: 100.2)
+    OCR1A = 313; // "10.0ms" freq on my meter
+    // At this point, I started running into the resolution limit
+    // of my tiny screen and cursor positions. I measured the 
+    // half-wavelength (rise-to-fall) at somewhere around 5.02ms
+    // or 5.04ms, it was definitely above 5.0, but a bit jittery.
+    // That would be about 10.4 to 10.8ms for the full wave, which 
+    // is a little too long, but I think this is measurement accuracy
+    // rather than timing accuracy.
+
+    // In any case, I think that we have a decent 100Hz solar and
+    // sidereal timebase. I'm going to try it without the prescaler
+    // and see if I can improve the resolution.
+    
     // turn on CTC mode:
     TCCR1B |= (1 << WGM12);
     // Set CS10 bit (reset CS11 and CS12 bits) for no prescaler:
